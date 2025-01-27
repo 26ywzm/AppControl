@@ -28,12 +28,23 @@
             border-radius: 4px;
             overflow-x: auto;
         }
+        .status-indicator {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+        }
+        .error {
+            background-color: #ffe6e6;
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
     <div class="demo-section">
         <h1>应用控制器组件示例</h1>
         <p>这个示例展示了如何在任何网页中嵌入应用控制器组件。</p>
+        <div id="serverStatus" class="status-indicator">正在连接服务器...</div>
     </div>
 
     <div class="demo-section">
@@ -62,11 +73,40 @@ appWidget.init('yourContainerId');
     <!-- 引入控制器脚本 -->
     <script src="appControlWidget.js"></script>
     <script>
-        // 创建并初始化控制器
-        const appWidget = new AppControlWidget({
-            serverUrl: 'http://localhost:3001'  // 本地测试时使用
-        });
-        appWidget.init('appControlContainer');
+        // 测试服务器连接
+        async function testServerConnection() {
+            const serverStatus = document.getElementById('serverStatus');
+            try {
+                const response = await fetch('http://192.168.31.177:3001/test');
+                if (response.ok) {
+                    serverStatus.textContent = '服务器连接成功';
+                    serverStatus.style.backgroundColor = '#e8f5e9';
+                    serverStatus.style.color = '#28a745';
+                    return true;
+                } else {
+                    throw new Error('服务器响应异常');
+                }
+            } catch (error) {
+                serverStatus.textContent = '无法连接到服务器，请检查服务器地址和状态';
+                serverStatus.classList.add('error');
+                console.error('服务器连接失败:', error);
+                return false;
+            }
+        }
+
+        // 初始化应用控制器
+        async function initializeWidget() {
+            if (await testServerConnection()) {
+                // 创建并初始化控制器
+                const appWidget = new AppControlWidget({
+                    serverUrl: 'http://192.168.31.177:3001'  // 使用实际的服务器IP地址
+                });
+                appWidget.init('appControlContainer');
+            }
+        }
+
+        // 页面加载时初始化
+        window.addEventListener('load', initializeWidget);
     </script>
 </body>
 </html>

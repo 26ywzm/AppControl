@@ -1,5 +1,5 @@
 class AppController {
-    constructor(serverUrl = 'http://localhost:3001') {
+    constructor(serverUrl = 'http://192.168.31.177:3001') {
         this.serverUrl = serverUrl;
     }
 
