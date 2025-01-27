@@ -1,0 +1,12 @@
+{
+  "name": "app-controller",
+  "version": "1.0.0",
+  "description": "Web application to control desktop apps",
+  "main": "app.js",
+  "dependencies": {
+    "accepts": "^1.3.8",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "negotiator": "^1.0.0"
+  }
+}

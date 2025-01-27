@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用控制器组件示例</title>
+    <style>
+        /* 页面样式 */
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .demo-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-section">
+        <h1>应用控制器组件示例</h1>
+        <p>这个示例展示了如何在任何网页中嵌入应用控制器组件。</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>应用控制器</h2>
+        <!-- 控制器将被加载到这个容器中 -->
+        <div id="appControlContainer"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>如何在其他页面中使用</h2>
+        <p>1. 引入控制器脚本：</p>
+        <pre><code>&lt;script src="appControlWidget.js">&lt;/script></code></pre>
+        
+        <p>2. 创建容器元素：</p>
+        <pre><code>&lt;div id="yourContainerId">&lt;/div></code></pre>
+        
+        <p>3. 初始化控制器：</p>
+        <pre><code>
+const appWidget = new AppControlWidget({
+    serverUrl: 'http://your-server-ip:3001'  // 替换为你的服务器地址
+});
+appWidget.init('yourContainerId');
+        </code></pre>
+    </div>
+
+    <!-- 引入控制器脚本 -->
+    <script src="appControlWidget.js"></script>
+    <script>
+        // 创建并初始化控制器
+        const appWidget = new AppControlWidget({
+            serverUrl: 'http://localhost:3001'  // 本地测试时使用
+        });
+        appWidget.init('appControlContainer');
+    </script>
+</body>
+</html>
