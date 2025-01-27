@@ -1,107 +1,110 @@
 const express = require('express');
-const { exec } = require('child_process');
-const path = require('path');
 const cors = require('cors');
+const { exec } = require('child_process');
 const fs = require('fs').promises;
+const path = require('path');
 
 const app = express();
 const port = 3001;
 
-// 允许跨域请求
+// 启用 CORS，允许所有来源的请求
 app.use(cors());
 
 // 提供静态文件
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // 读取应用程序配置
-let applications = {};
-
-async function loadConfig() {
+async function loadApplications() {
     try {
         const configPath = path.join(__dirname, 'config', 'applications.json');
-        const configData = await fs.readFile(configPath, 'utf8');
-        const config = JSON.parse(configData);
-        applications = config.applications;
-        console.log('成功加载应用程序配置');
-        return true;
+        const data = await fs.readFile(configPath, 'utf8');
+        const config = JSON.parse(data);
+        return config.applications;
     } catch (error) {
-        console.error('加载配置文件失败:', error);
-        return false;
+        console.error('加载应用程序配置失败:', error);
+        return {};
     }
 }
 
-// 获取所有可用应用列表的接口
-app.get('/api/applications', (req, res) => {
-    const appList = Object.entries(applications).map(([id, app]) => ({
-        id,
-        name: app.name,
-        description: app.description,
-        icon: app.icon
-    }));
-    res.json(appList);
+// 获取应用程序列表的 API
+app.get('/api/applications', async (req, res) => {
+    try {
+        const applications = await loadApplications();
+        // 转换为前端需要的格式
+        const appList = Object.entries(applications).map(([id, app]) => ({
+            id,
+            name: app.name,
+            description: app.description,
+            icon: app.icon
+        }));
+        console.log('发送应用列表:', appList); // 添加日志
+        res.json(appList);
+    } catch (error) {
+        console.error('获取应用程序列表失败:', error);
+        res.status(500).json({ error: '获取应用程序列表失败' });
+    }
 });
 
-// 启动应用程序终结点
+// 启动应用程序
 app.get('/start/:app', async (req, res) => {
-    const appName = req.params.app;
-    if (applications[appName]) {
-        console.log(`尝试启动 ${appName}，命令：${applications[appName].start}`);
-        exec(applications[appName].start, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`启动 ${appName} 失败:`, error);
-                res.status(500).json({ error: `启动${applications[appName].name}失败: ${error.message}` });
-                return;
-            }
-            console.log(`${appName} 启动成功`);
-            res.json({ message: `${applications[appName].name}启动成功` });
-        });
-    } else {
-        res.status(404).json({ error: '找不到指定的应用程序' });
+    try {
+        const applications = await loadApplications();
+        const appName = req.params.app;
+        console.log('尝试启动应用:', appName); // 添加日志
+        
+        if (applications[appName]) {
+            exec(applications[appName].start, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`启动${appName}失败:`, error);
+                    res.status(500).json({ error: `启动${applications[appName].name}失败` });
+                    return;
+                }
+                console.log(`${appName}启动成功`); // 添加日志
+                res.json({ message: `${applications[appName].name}启动成功` });
+            });
+        } else {
+            res.status(404).json({ error: '找不到指定的应用程序' });
+        }
+    } catch (error) {
+        console.error('启动应用程序时发生错误:', error);
+        res.status(500).json({ error: '启动应用程序时发生错误' });
     }
 });
 
-// 停止应用程序终结点
+// 停止应用程序
 app.get('/stop/:app', async (req, res) => {
-    const appName = req.params.app;
-    if (applications[appName]) {
-        console.log(`尝试关闭 ${appName}，命令：${applications[appName].kill}`);
-        exec(applications[appName].kill, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`关闭 ${appName} 失败:`, error);
-                res.status(500).json({ error: `关闭${applications[appName].name}失败: ${error.message}` });
-                return;
-            }
-            if (stderr) {
-                console.log(`关闭 ${appName} 时有警告:`, stderr);
-            }
-            console.log(`${appName} 已关闭`);
-            res.json({ message: `${applications[appName].name}已关闭` });
-        });
-    } else {
-        res.status(404).json({ error: '找不到指定的应用程序' });
+    try {
+        const applications = await loadApplications();
+        const appName = req.params.app;
+        console.log('尝试停止应用:', appName); // 添加日志
+        
+        if (applications[appName]) {
+            exec(applications[appName].kill, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`关闭${appName}失败:`, error);
+                    res.status(500).json({ error: `关闭${applications[appName].name}失败` });
+                    return;
+                }
+                console.log(`${appName}已关闭`); // 添加日志
+                res.json({ message: `${applications[appName].name}已关闭` });
+            });
+        } else {
+            res.status(404).json({ error: '找不到指定的应用程序' });
+        }
+    } catch (error) {
+        console.error('停止应用程序时发生错误:', error);
+        res.status(500).json({ error: '停止应用程序时发生错误' });
     }
 });
 
-// 提供主页
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// 测试端点
+app.get('/test', (req, res) => {
+    res.json({ message: '服务器正常运行' });
 });
 
 // 启动服务器
-async function startServer() {
-    // 首先加载配置
-    const configLoaded = await loadConfig();
-    if (!configLoaded) {
-        console.error('无法启动服务器：配置加载失败');
-        process.exit(1);
-    }
-
-    // 启动服务器
-    app.listen(port, () => {
-        console.log(`服务器运行在 http://localhost:${port}`);
-        console.log('可用的应用程序:', Object.keys(applications).join(', '));
-    });
-}
-
-// 启动服务器
-startServer();
+app.listen(port, '0.0.0.0', () => {
+    console.log(`服务器运行在 http://0.0.0.0:${port}`);
+    console.log(`本地访问: http://localhost:${port}`);
+    console.log(`局域网访问: http://${require('os').networkInterfaces()['以太网']?.[0]?.address || 'YOUR_IP_ADDRESS'}:${port}`);
+});
