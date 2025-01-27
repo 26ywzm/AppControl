@@ -16,11 +16,16 @@ class AppControlWidget {
         // 添加样式
         this.addStyles();
         
-        // 加载应用列表
-        await this.loadApplications();
-        
-        // 渲染界面
-        this.render();
+        try {
+            // 加载应用列表
+            await this.loadApplications();
+            
+            // 渲染界面
+            this.render();
+        } catch (error) {
+            console.error('初始化失败:', error);
+            this.container.innerHTML = '<div class="app-widget-error">加载应用列表失败</div>';
+        }
     }
 
     // 添加样式
@@ -70,7 +75,7 @@ class AppControlWidget {
                     border-radius: 4px;
                     cursor: pointer;
                     font-size: 14px;
-                    transition: opacity 0.2s;
+                    transition: all 0.2s;
                 }
                 .app-widget-btn:hover {
                     opacity: 0.9;
@@ -87,9 +92,21 @@ class AppControlWidget {
                     margin-top: 8px;
                     font-size: 14px;
                     color: #666;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                }
+                .app-widget-status.success {
+                    background-color: #e8f5e9;
+                    color: #2e7d32;
+                }
+                .app-widget-status.error {
+                    background-color: #ffebee;
+                    color: #c62828;
                 }
                 .app-widget-error {
                     color: #f44336;
+                    text-align: center;
+                    padding: 20px;
                 }
             `;
             document.head.appendChild(style);
@@ -99,19 +116,27 @@ class AppControlWidget {
     // 从服务器加载应用列表
     async loadApplications() {
         try {
+            console.log('正在从服务器加载应用列表...');
             const response = await fetch(`${this.serverUrl}/api/applications`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            this.apps = await response.json();
+            const data = await response.json();
+            console.log('加载到的应用列表:', data);
+            this.apps = data;
         } catch (error) {
             console.error('加载应用程序列表失败:', error);
-            this.container.innerHTML = '<div class="app-widget-error">加载应用程序列表失败</div>';
+            throw error;
         }
     }
 
     // 渲染界面
     render() {
+        if (!this.apps || this.apps.length === 0) {
+            this.container.innerHTML = '<div class="app-widget-error">没有可用的应用程序</div>';
+            return;
+        }
+
         this.container.innerHTML = '';
         const widgetContainer = document.createElement('div');
         widgetContainer.className = 'app-widget';
@@ -119,42 +144,72 @@ class AppControlWidget {
         this.apps.forEach(app => {
             const appElement = document.createElement('div');
             appElement.className = 'app-widget-item';
-            appElement.innerHTML = `
-                <div class="app-widget-header">
-                    <h3 class="app-widget-title">${app.name}</h3>
-                </div>
-                <div class="app-widget-description">${app.description || ''}</div>
-                <div class="app-widget-controls">
-                    <button class="app-widget-btn start" onclick="appWidget.controlApp('${app.id}', 'start')">
-                        启动${app.name}
-                    </button>
-                    <button class="app-widget-btn stop" onclick="appWidget.controlApp('${app.id}', 'stop')">
-                        关闭${app.name}
-                    </button>
-                </div>
-                <div id="${app.id}-status" class="app-widget-status"></div>
-            `;
+            
+            // 创建应用标题
+            const header = document.createElement('div');
+            header.className = 'app-widget-header';
+            header.innerHTML = `<h3 class="app-widget-title">${app.name}</h3>`;
+            
+            // 创建描述
+            const description = document.createElement('div');
+            description.className = 'app-widget-description';
+            description.textContent = app.description || '';
+            
+            // 创建控制按钮
+            const controls = document.createElement('div');
+            controls.className = 'app-widget-controls';
+            
+            const startButton = document.createElement('button');
+            startButton.className = 'app-widget-btn start';
+            startButton.textContent = `启动${app.name}`;
+            startButton.addEventListener('click', () => this.controlApp(app.id, 'start'));
+            
+            const stopButton = document.createElement('button');
+            stopButton.className = 'app-widget-btn stop';
+            stopButton.textContent = `关闭${app.name}`;
+            stopButton.addEventListener('click', () => this.controlApp(app.id, 'stop'));
+            
+            controls.appendChild(startButton);
+            controls.appendChild(stopButton);
+            
+            // 创建状态显示
+            const status = document.createElement('div');
+            status.id = `${app.id}-status`;
+            status.className = 'app-widget-status';
+            
+            // 组装所有元素
+            appElement.appendChild(header);
+            appElement.appendChild(description);
+            appElement.appendChild(controls);
+            appElement.appendChild(status);
+            
             widgetContainer.appendChild(appElement);
         });
 
         this.container.appendChild(widgetContainer);
+        console.log('界面渲染完成');
     }
 
     // 控制应用程序
     async controlApp(appId, action) {
+        console.log(`正在${action === 'start' ? '启动' : '关闭'}应用:`, appId);
         const statusElement = document.getElementById(`${appId}-status`);
+        statusElement.className = 'app-widget-status';
+        statusElement.textContent = `正在${action === 'start' ? '启动' : '关闭'}...`;
+
         try {
             const response = await fetch(`${this.serverUrl}/${action}/${appId}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
+            console.log('服务器响应:', data);
             statusElement.textContent = data.message || data.error;
-            statusElement.className = 'app-widget-status';
+            statusElement.className = `app-widget-status ${data.error ? 'error' : 'success'}`;
         } catch (error) {
-            statusElement.textContent = '控制应用程序时发生错误';
-            statusElement.className = 'app-widget-status app-widget-error';
             console.error('控制应用程序时发生错误:', error);
+            statusElement.textContent = '操作失败，请检查网络连接';
+            statusElement.className = 'app-widget-status error';
         }
     }
 }
