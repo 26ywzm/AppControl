@@ -1,60 +1,60 @@
 {
-    "applications": {
-        "notepad": {
+    "applications": [
+        {
+            "id": "notepad",
             "name": "记事本",
-            "start": "notepad.exe",
-            "kill": "taskkill /F /IM notepad.exe",
-            "description": "Windows 记事本 - 用于快速编辑文本文件",
-            "icon": "notepad.png"
+            "description": "Windows 记事本",
+            "startCommand": "notepad.exe",
+            "killCommand": "taskkill /F /IM notepad.exe"
         },
-        "calculator": {
+        {
+            "id": "calculator",
             "name": "计算器",
-            "start": "calc.exe",
-            "kill": "taskkill /F /IM Calculator.exe /IM ApplicationFrameHost.exe",
-            "description": "Windows 计算器 - 执行基本和科学计算",
-            "icon": "calculator.png"
+            "description": "Windows 计算器",
+            "startCommand": "calc.exe",
+            "killCommand": "taskkill /F /IM Calculator.exe"
         },
-        "paint": {
+        {
+            "id": "mspaint",
             "name": "画图",
-            "start": "mspaint.exe",
-            "kill": "taskkill /F /IM mspaint.exe",
-            "description": "Windows 画图 - 简单的图像编辑工具",
-            "icon": "paint.png"
+            "description": "Windows 画图",
+            "startCommand": "mspaint.exe",
+            "killCommand": "taskkill /F /IM mspaint.exe"
         },
-        "explorer": {
+        {
+            "id": "explorer",
             "name": "文件资源管理器",
-            "start": "explorer.exe",
-            "kill": "taskkill /F /IM explorer.exe",
-            "description": "Windows 文件资源管理器 - 浏览和管理文件",
-            "icon": "explorer.png"
+            "description": "Windows 文件资源管理器",
+            "startCommand": "explorer.exe",
+            "killCommand": "taskkill /F /IM explorer.exe"
         },
-        "wordpad": {
+        {
+            "id": "wordpad",
             "name": "写字板",
-            "start": "write.exe",
-            "kill": "taskkill /F /IM wordpad.exe",
-            "description": "Windows 写字板 - 支持格式的文本编辑器",
-            "icon": "wordpad.png"
+            "description": "Windows 写字板",
+            "startCommand": "write.exe",
+            "killCommand": "taskkill /F /IM wordpad.exe"
         },
-        "cmd": {
+        {
+            "id": "cmd",
             "name": "命令提示符",
-            "start": "cmd.exe",
-            "kill": "taskkill /F /IM cmd.exe",
-            "description": "Windows 命令提示符 - 执行命令行操作",
-            "icon": "cmd.png"
+            "description": "Windows 命令提示符",
+            "startCommand": "cmd.exe",
+            "killCommand": "taskkill /F /IM cmd.exe"
         },
-        "taskmgr": {
+        {
+            "id": "taskmgr",
             "name": "任务管理器",
-            "start": "taskmgr.exe",
-            "kill": "taskkill /F /IM taskmgr.exe",
-            "description": "Windows 任务管理器 - 监控系统性能和进程",
-            "icon": "taskmgr.png"
+            "description": "Windows 任务管理器",
+            "startCommand": "taskmgr.exe",
+            "killCommand": "taskkill /F /IM taskmgr.exe"
         },
-        "control": {
+        {
+            "id": "control",
             "name": "控制面板",
-            "start": "control.exe",
-            "kill": "taskkill /F /IM control.exe",
-            "description": "Windows 控制面板 - 系统设置和配置",
-            "icon": "control.png"
+            "description": "Windows 控制面板",
+            "startCommand": "control.exe",
+            "killCommand": "taskkill /F /IM control.exe"
         }
-    }
+    ]
 }

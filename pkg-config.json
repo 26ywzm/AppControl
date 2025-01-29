@@ -1,0 +1,5 @@
+{
+    "targets": ["node14-win-x64"],
+    "output": "appcontrol.exe",
+    "scripts": "app.js"
+}
