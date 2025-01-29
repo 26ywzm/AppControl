@@ -8,9 +8,10 @@ const path = require('path');
 
 // 确保资源路径在打包后也能正确访问
 const getAssetPath = (relativePath) => {
-  return process.pkg 
-    ? path.join(path.dirname(process.execPath), relativePath)
-    : path.join(__dirname, relativePath);
+  const basePath = process.pkg 
+    ? path.dirname(process.execPath)
+    : __dirname;
+  return path.join(basePath, relativePath);
 };
 
 const app = express();
@@ -27,7 +28,7 @@ app.use(express.static(getAssetPath('public')));
 
 // 测试端点
 app.get('/test', (req, res) => {
-    res.json({ status: 'ok', message: '服务器运行正常' });
+    res.json({ status: 'ok' });
 });
 
 // 获取应用列表

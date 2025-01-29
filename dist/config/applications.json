@@ -1,0 +1,60 @@
+{
+    "applications": [
+        {
+            "id": "notepad",
+            "name": "记事本",
+            "description": "Windows 记事本",
+            "startCommand": "notepad.exe",
+            "killCommand": "taskkill /F /IM notepad.exe"
+        },
+        {
+            "id": "calculator",
+            "name": "计算器",
+            "description": "Windows 计算器",
+            "startCommand": "calc.exe",
+            "killCommand": "taskkill /F /IM Calculator.exe"
+        },
+        {
+            "id": "mspaint",
+            "name": "画图",
+            "description": "Windows 画图",
+            "startCommand": "mspaint.exe",
+            "killCommand": "taskkill /F /IM mspaint.exe"
+        },
+        {
+            "id": "explorer",
+            "name": "文件资源管理器",
+            "description": "Windows 文件资源管理器",
+            "startCommand": "explorer.exe",
+            "killCommand": "taskkill /F /IM explorer.exe"
+        },
+        {
+            "id": "wordpad",
+            "name": "写字板",
+            "description": "Windows 写字板",
+            "startCommand": "write.exe",
+            "killCommand": "taskkill /F /IM wordpad.exe"
+        },
+        {
+            "id": "cmd",
+            "name": "命令提示符",
+            "description": "Windows 命令提示符",
+            "startCommand": "cmd.exe",
+            "killCommand": "taskkill /F /IM cmd.exe"
+        },
+        {
+            "id": "taskmgr",
+            "name": "任务管理器",
+            "description": "Windows 任务管理器",
+            "startCommand": "taskmgr.exe",
+            "killCommand": "taskkill /F /IM taskmgr.exe"
+        },
+        {
+            "id": "control",
+            "name": "控制面板",
+            "description": "Windows 控制面板",
+            "startCommand": "control.exe",
+            "killCommand": "taskkill /F /IM control.exe"
+        }
+    ]
+}
