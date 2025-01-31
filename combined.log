@@ -1,0 +1,38 @@
+{"level":"info","message":"服务器已启动，监听端口 3001","timestamp":"2025-01-31T09:27:09.235Z"}
+{"level":"info","message":"服务器已启动，监听端口 3001","timestamp":"2025-01-31T09:32:32.384Z"}
+{"level":"info","message":"正在关闭服务器...","timestamp":"2025-01-31T09:34:42.559Z"}
+{"level":"info","message":"服务器已启动，监听端口 3001","timestamp":"2025-01-31T09:34:44.126Z"}
+{"level":"info","message":"已启动应用: 记事本","timestamp":"2025-01-31T09:34:57.158Z"}
+{"level":"info","message":"已终止进程: 记事本","timestamp":"2025-01-31T09:35:02.836Z"}
+{"level":"info","message":"已启动应用: 记事本","timestamp":"2025-01-31T09:36:12.955Z"}
+{"level":"info","message":"已终止进程: 记事本","timestamp":"2025-01-31T09:36:15.481Z"}
+{"level":"info","message":"已为应用 记事本 创建定时任务: start at 37 17 * * *","timestamp":"2025-01-31T09:36:43.414Z"}
+{"level":"info","message":"执行定时任务: start 记事本","timestamp":"2025-01-31T09:37:00.024Z"}
+{"level":"info","message":"定时任务成功启动应用: 记事本","timestamp":"2025-01-31T09:37:00.027Z"}
+{"level":"info","message":"已终止进程: 记事本","timestamp":"2025-01-31T09:37:16.655Z"}
+{"level":"warn","message":"执行关闭命令时出现警告:","timestamp":"2025-01-31T09:37:16.710Z"}
+{"level":"info","message":"已启动应用: 记事本","timestamp":"2025-01-31T09:37:22.731Z"}
+{"level":"info","message":"已取消应用 记事本 的现有定时任务","timestamp":"2025-01-31T09:37:33.384Z"}
+{"level":"info","message":"已为应用 记事本 创建定时任务: stop at 38 17 * * *","timestamp":"2025-01-31T09:37:33.385Z"}
+{"level":"info","message":"执行定时任务: stop 记事本","timestamp":"2025-01-31T09:38:00.006Z"}
+{"level":"info","message":"定时任务成功停止应用: 记事本","timestamp":"2025-01-31T09:38:00.012Z"}
+{"level":"info","message":"已启动应用: 控制面板","timestamp":"2025-01-31T10:09:35.580Z"}
+{"level":"info","message":"已终止进程: 控制面板","timestamp":"2025-01-31T10:09:40.016Z"}
+{"level":"warn","message":"执行关闭命令时出现警告:","timestamp":"2025-01-31T10:09:40.097Z"}
+{"level":"info","message":"已启动应用: 控制面板","timestamp":"2025-01-31T10:09:44.734Z"}
+{"level":"info","message":"已终止进程: 控制面板","timestamp":"2025-01-31T10:09:48.618Z"}
+{"level":"warn","message":"执行关闭命令时出现警告:","timestamp":"2025-01-31T10:09:48.671Z"}
+{"level":"info","message":"已启动应用: 写字板","timestamp":"2025-01-31T10:09:54.249Z"}
+{"level":"info","message":"已终止进程: 写字板","timestamp":"2025-01-31T10:09:57.359Z"}
+{"level":"info","message":"已启动应用: 计算器","timestamp":"2025-01-31T14:12:25.170Z"}
+{"level":"info","message":"已终止进程: 计算器","timestamp":"2025-01-31T14:12:29.692Z"}
+{"level":"warn","message":"执行关闭命令时出现警告:","timestamp":"2025-01-31T14:12:29.768Z"}
+{"level":"info","message":"已启动应用: 计算器","timestamp":"2025-01-31T14:12:36.067Z"}
+{"level":"info","message":"已终止进程: 计算器","timestamp":"2025-01-31T14:12:39.959Z"}
+{"level":"warn","message":"执行关闭命令时出现警告:","timestamp":"2025-01-31T14:12:40.009Z"}
+{"level":"info","message":"已启动应用: 计算器","timestamp":"2025-01-31T14:14:15.519Z"}
+{"level":"info","message":"已启动应用: 记事本","timestamp":"2025-01-31T14:14:19.307Z"}
+{"level":"info","message":"已终止进程: 计算器","timestamp":"2025-01-31T14:14:22.693Z"}
+{"level":"warn","message":"执行关闭命令时出现警告:","timestamp":"2025-01-31T14:14:22.772Z"}
+{"level":"info","message":"已终止进程: 记事本","timestamp":"2025-01-31T14:14:23.950Z"}
+{"level":"info","message":"正在关闭服务器...","timestamp":"2025-01-31T14:18:25.345Z"}

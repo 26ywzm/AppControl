@@ -1,0 +1,6 @@
+{"level":"info","message":"服务器已启动，监听端口 3001","timestamp":"2025-01-31T14:20:18.238Z"}
+{"level":"info","message":"已启动应用: 记事本","timestamp":"2025-01-31T14:20:27.660Z"}
+{"level":"info","message":"已启动应用: 计算器","timestamp":"2025-01-31T14:20:29.897Z"}
+{"level":"info","message":"已终止进程: 计算器","timestamp":"2025-01-31T14:20:31.684Z"}
+{"level":"warn","message":"执行关闭命令时出现警告:","timestamp":"2025-01-31T14:20:31.770Z"}
+{"level":"info","message":"已终止进程: 记事本","timestamp":"2025-01-31T14:20:33.090Z"}

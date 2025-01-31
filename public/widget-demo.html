@@ -11,6 +11,7 @@
             padding: 20px;
             background-color: #f0f0f0;
         }
+
         .demo-section {
             max-width: 1200px;
             margin: 0 auto;
@@ -18,87 +19,135 @@
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         h1, h2 {
             color: #333;
+            margin-top: 0;
         }
+
         pre {
             background: #f5f5f5;
             padding: 15px;
             border-radius: 4px;
             overflow-x: auto;
+            margin: 10px 0;
         }
+
+        code {
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+        }
+
         .status-bar {
             background-color: #e8f5e9;
             padding: 10px;
             border-radius: 4px;
             margin-bottom: 20px;
         }
+
         .status-error {
             background-color: #ffebee;
         }
+
+        .note {
+            background-color: #fff3e0;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .code-explanation {
+            margin: 10px 0;
+            color: #666;
+        }
     </style>
-    <!-- 引入控制器脚本 -->
-    <script src="./appControlWidget.js"></script>
 </head>
 <body>
     <div class="demo-section">
         <h1>应用控制器组件示例</h1>
-        <p>这个示例展示了如何在任何网页中嵌入应用控制器组件。</p>
+        <p>这个示例展示了如何在任何网页中嵌入应用控制器组件。组件提供以下功能：</p>
+        <ul>
+            <li>实时显示应用状态和运行时间</li>
+            <li>启动和停止应用</li>
+            <li>设置定时任务</li>
+            <li>自动更新状态（每5秒）</li>
+        </ul>
         <div id="connectionStatus" class="status-bar">正在连接服务器...</div>
     </div>
 
     <div class="demo-section">
-        <h2>应用控制器</h2>
-        <!-- 控制器将被加载到这个容器中 -->
+        <h2>组件演示</h2>
         <div id="appControlContainer"></div>
     </div>
 
     <div class="demo-section">
         <h2>如何在其他页面中使用</h2>
-        <p>1. 引入控制器脚本：</p>
+        
+        <p>1. 引入组件脚本：</p>
         <pre><code>&lt;script src="appControlWidget.js">&lt;/script></code></pre>
         
         <p>2. 创建容器元素：</p>
         <pre><code>&lt;div id="yourContainerId">&lt;/div></code></pre>
         
-        <p>3. 初始化控制器：</p>
-        <pre><code>
-const appWidget = new AppControlWidget({
-    serverUrl: 'http://192.168.31.177:3001'  // 替换为你的服务器地址
-});
-appWidget.init('yourContainerId');
-        </code></pre>
+        <p>3. 初始化组件：</p>
+        <pre><code>// 创建组件实例
+const widget = new AppControlWidget('yourContainerId');
+
+// 在页面关闭时清理资源（可选）
+window.addEventListener('beforeunload', () => {
+    widget.destroy();
+});</code></pre>
+
+        <div class="note">
+            <strong>注意：</strong>
+            <ul>
+                <li>组件会自动连接到 http://localhost:3001，如需修改服务器地址，请修改 appControlWidget.js 中的 serverUrl</li>
+                <li>组件会自动处理应用状态的更新，无需手动刷新</li>
+                <li>建议在页面关闭时调用 destroy() 方法以清理资源</li>
+            </ul>
+        </div>
     </div>
 
+    <!-- 引入组件脚本 -->
+    <script src="appControlWidget.js"></script>
     <script>
-        // 将 appWidget 声明为全局变量
+        // 声明全局变量
         let appWidget;
-
-        // 等待页面加载完成后初始化控制器
+        
+        // 等待页面加载完成后初始化组件
         window.addEventListener('load', async function() {
             const statusBar = document.getElementById('connectionStatus');
-            const serverUrl = 'http://192.168.31.177:3001';
             
             try {
-                // 测试服务器连接
-                const response = await fetch(`${serverUrl}/test`);
-                if (response.ok) {
-                    statusBar.textContent = '服务器连接成功！';
-                    statusBar.classList.remove('status-error');
-                    
-                    // 创建并初始化控制器
-                    appWidget = new AppControlWidget({
-                        serverUrl: serverUrl
-                    });
-                    await appWidget.init('appControlContainer');
-                } else {
-                    throw new Error('服务器响应异常');
-                }
+                // 创建组件实例并保存到全局变量
+                appWidget = new AppControlWidget('appControlContainer');
+                
+                // 将实例方法绑定到window对象，供HTML中的onclick使用
+                window.startApp = (appId) => appWidget.startApp(appId);
+                window.stopApp = (appId) => appWidget.stopApp(appId);
+                window.showScheduleModal = (appJson) => {
+                    try {
+                        const app = typeof appJson === 'string' ? JSON.parse(appJson) : appJson;
+                        appWidget.showScheduleModal(app);
+                    } catch (error) {
+                        console.error('解析应用数据失败:', error);
+                        alert('打开定时任务设置失败');
+                    }
+                };
+                
+                // 更新连接状态
+                statusBar.textContent = '服务器连接成功！';
+                statusBar.classList.remove('status-error');
+                
+                // 在页面关闭时清理资源
+                window.addEventListener('beforeunload', () => {
+                    appWidget.destroy();
+                });
             } catch (error) {
-                statusBar.textContent = '无法连接到服务器，请检查服务器地址是否正确';
+                statusBar.textContent = '无法连接到服务器，请检查服务器是否运行';
                 statusBar.classList.add('status-error');
-                console.error('连接服务器失败:', error);
+                console.error('初始化组件失败:', error);
             }
         });
     </script>
